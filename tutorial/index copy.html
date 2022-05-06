@@ -18,11 +18,14 @@
 				<a class="ar-object" id="4" href="#">item_4</a>
 			</div>
 	
-			<div id="container" style="position: fixed;"></div>
+			<div id="container" style="position: fixed;">
+				<button type="button" id="place-button">PLACE</button></div>
 			  
 			<span style="font-size:30px;cursor:pointer;position: absolute;" onclick="openNav()">&#9776; open</span>
 		
-			<button type="button" id="place-button">PLACE</button>
+			
+		</div>
+			
 		</div>
 
 		<script>
@@ -34,18 +37,22 @@
 			  document.getElementById("mySidenav").style.width = "0";
 			}
 		</script>
+		<!-- Remove this when import maps will be widely supported -->
+		<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
 
-	<script type="importmap">
-		{
-			"imports": {
-				"three": "../build/three.module.js"
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "../build/three.module.js"
+				}
+				
 			}
-			
-		}
-	</script>
+		</script>
+
 		<script type="module">
+
 			import * as THREE from 'three';
-			//import * as THREE from './build/three.module.js';
+
 			import { ARButton } from './jsm/webxr/ARButton.js';
 			import { VRButton } from './jsm/webxr/VRButton.js';
 			//
@@ -67,15 +74,15 @@
 			animate();
 
 			$(".ar-object").click(function(){
-				// if(current_object != null){
-				// 	scene.remove(current_object);
-				// }
+				if(current_object != null){
+					scene.remove(current_object);
+				}
 
-				// loadModel($(this).attr("id"));
+				loadModel($(this).attr("id"));
 			});
 
 			$("#ARButton").click(function(){
-				// current_object.visible = false;
+				current_object.visible = false;
 				isAR = true;
 			});
 
@@ -90,12 +97,10 @@
 
 			function arPlace(){
 				if ( reticle.visible ) {
-					// current_object.position.setFromMatrixPosition(reticle.matrix);
-					// current_object.visible = true;
+					current_object.position.setFromMatrixPosition(reticle.matrix);
+					current_object.visible = true;
 				}
 			}
-
-
 
 			function init() {
 
@@ -116,49 +121,11 @@
 
 				//
 
-				new RGBELoader()
-					.setPath( 'textures/equirectangular/' )
-					.load( 'royal_esplanade_1k.hdr', function ( texture ) {
-
-						texture.mapping = THREE.EquirectangularReflectionMapping;
-
-						//scene.background = texture;
-						scene.environment = texture;
-
-						render();
-
-						// model
-
-						const loader = new GLTFLoader().setPath( '3d/' );
-						loader.load( 'DamagedHelmet.gltf', function ( gltf ) {
-
-							gltf.scene.traverse(function (child) {
-							if (child.isMesh) {
-								let m = child
-								var monkey = m
-								console.log('monkey ->' + monkey)
-								model = monkey;
-								}
-							
-							})
-						    var model = gltf.scene;
-							var obj = gltf.scene;
-							model.position.set( 0, 0, -1 );
-							model.scale.set( 0.4, 0.4, 0.4 );
-							//mesh.quaternion.setFromRotationMatrix(; controller.matrixWorld );
-							//console.log(gltf.scene)
-							//cubes77.push(gltf.scene)
-							console.log(model)
-							//onlodinen(model)
-							scene.add( model );
-							var GlbObject = model ;
-							console.log('Default OBJ -> ' + GlbObject.name)
-							
-							render();
-
-						} );
-
-					} );
+				const geometry = new THREE.BoxGeometry();
+				const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+				const cube = new THREE.Mesh( geometry, material );
+				cube.position.z = -4;
+				scene.add( cube );
 
 				renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
@@ -187,11 +154,11 @@
 					optionalFeatures: ['dom-overlay'],
 				}
 
-				options.domOverlay = { root: document.getElementById('content')};
+				options.domOverlay = { root: document.getElementById('container')};
 
-				document.body.appendChild( ARButton.createButton(renderer, options));
+				//document.body.appendChild( ARButton.createButton(renderer, options));
 
-				//document.body.appendChild( ARButton.createButton( renderer, { requiredFeatures: [ 'hit-test' ] } ) );
+				document.body.appendChild( ARButton.createButton( renderer, { requiredFeatures: [ 'hit-test' ] } ) );
 
 				//
 
@@ -240,9 +207,9 @@
 			var touchDown, touchX, touchY, deltaX, deltaY;
 
 			function rotateObject(){
-				// if(current_object && reticle.visible){
-				// 	current_object.rotation.y += deltaX / 100;
-				// }
+				if(current_object && reticle.visible){
+					current_object.rotation.y += deltaX / 100;
+				}
 			}
 
 			function onWindowResize() {
@@ -296,7 +263,7 @@
 							box.setFromObject(current_object);
 							box.center(controls.target);
 
-							document.getElementById("place-button").style.display = "block";
+							document.getElementById("place-button").style.display = "	";
 
 						} );
 
@@ -321,7 +288,7 @@
 
 							reticle.visible = false;
 
-							document.getElementById("place-button").style.display = "block";
+							document.getElementById("place-button").style.display = "none";
 
 						}
 
