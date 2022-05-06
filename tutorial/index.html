@@ -10,6 +10,7 @@
 	<body>
 
 		<div id="content">
+			asdasdga
 			<div id="mySidenav" class="sidenav">
 				<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 				<a class="ar-object" id="1" href="#">item_1</a>
@@ -90,6 +91,7 @@
 
 			function arPlace(){
 				if ( reticle.visible ) {
+					
 					// current_object.position.setFromMatrixPosition(reticle.matrix);
 					// current_object.visible = true;
 				}
@@ -182,10 +184,12 @@
 
 				//AR SETUP
 
+
 				let options = {
 					requiredFeatures: ['hit-test'],
-					optionalFeatures: ['dom-overlay'],
+					optionalFeatures: ['dom-overlay']
 				}
+
 
 				options.domOverlay = { root: document.getElementById('content')};
 
